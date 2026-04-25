@@ -1,0 +1,17 @@
+{
+  "name": "seo-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "eleventy --input=src --output=_site",
+    "serve": "eleventy --serve --input=src --output=_site"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.5"
+  }
+}

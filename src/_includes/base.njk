@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if title == "DevToolkit" %}{{ title }}{% else %}{{ title }} | DevToolkit{% endif %}</title>
+  <meta name="description" content="{{ description }}">
+  <link rel="canonical" href="https://devtoolkit.io{{ page.url }}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="{% if article %}article{% else %}website{% endif %}">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="https://devtoolkit.io{{ page.url }}">
+  <meta property="og:site_name" content="DevToolkit">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ description }}">
+
+  {% if article %}
+  <!-- JSON-LD Article Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ title }}",
+    "description": "{{ description }}",
+    "datePublished": "{{ date }}",
+    "dateModified": "{{ date }}",
+    "author": {
+      "@type": "Organization",
+      "name": "DevToolkit"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DevToolkit"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://devtoolkit.io{{ page.url }}"
+    }
+  }
+  </script>
+  {% endif %}
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  {% include "nav.njk" %}
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer>
+    <p>&copy; 2026 DevToolkit. Practical guides for developers.</p>
+  </footer>
+</body>
+</html>
