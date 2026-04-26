@@ -9,6 +9,12 @@ layout: base.njk
   <p>Comparisons, tutorials, and workflow tips to help you ship faster. No fluff, no hype -- just tools and techniques that work.</p>
 </div>
 
+<div class="cta-box">
+  <h2>Digital Products</h2>
+  <p>Ready-made developer tools: AI coding prompts, dev environment kits, SaaS landing page templates.</p>
+  <a href="https://ifdian.net/a/devpilot" class="cta-button">Browse Products</a>
+</div>
+
 <h2>Latest Articles</h2>
 <ul class="article-list">
 {% for article in collections.articles %}
