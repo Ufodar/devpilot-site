@@ -1,0 +1,234 @@
+---
+title: "Regex Tester & Debugger"
+description: "Free online regular expression tester. Test regex patterns with real-time matching, group capture, and cheat sheet. Supports JavaScript regex syntax."
+layout: tool.njk
+tool: true
+date: 2026-04-27
+---
+
+<div class="tool-container">
+  <div class="tool-header">
+    <h1>Regex Tester & Debugger</h1>
+    <p>Test regular expressions with real-time matching and capture group visualization. All processing happens in your browser.</p>
+  </div>
+
+  <div class="tool-main">
+    <div class="regex-pattern-row">
+      <span class="regex-delimiter">/</span>
+      <input type="text" id="regex-pattern" placeholder="Enter regex pattern..." spellcheck="false" autocomplete="off">
+      <span class="regex-delimiter">/</span>
+      <input type="text" id="regex-flags" value="g" maxlength="5" spellcheck="false" class="regex-flags-input" title="Flags: g=global, i=case-insensitive, m=multiline, s=dotall, u=unicode">
+    </div>
+
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Test String</span>
+        <div class="panel-actions">
+          <button onclick="pasteFromClipboard()" class="btn btn-sm">Paste</button>
+          <button onclick="clearAll()" class="btn btn-sm">Clear</button>
+        </div>
+      </div>
+      <textarea id="regex-input" placeholder="Enter test string here..." spellcheck="false"></textarea>
+    </div>
+
+    <div class="regex-results-row">
+      <div class="tool-panel regex-matches-panel">
+        <div class="panel-header">
+          <span>Match Result</span>
+          <span id="match-count" class="match-count"></span>
+        </div>
+        <div id="regex-highlight" class="regex-highlight-area"></div>
+      </div>
+      <div class="tool-panel regex-groups-panel">
+        <div class="panel-header">
+          <span>Capture Groups</span>
+        </div>
+        <div id="regex-groups" class="regex-groups-area"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="status-bar" class="status-bar"></div>
+</div>
+
+<div class="tool-features">
+  <h2>Regex Cheat Sheet</h2>
+  <div class="cheatsheet-grid">
+    <div class="cheatsheet-col">
+      <h3>Characters</h3>
+      <table class="cheatsheet-table">
+        <tr><td><code>.</code></td><td>Any character (except newline)</td></tr>
+        <tr><td><code>\d</code></td><td>Digit [0-9]</td></tr>
+        <tr><td><code>\w</code></td><td>Word character [a-zA-Z0-9_]</td></tr>
+        <tr><td><code>\s</code></td><td>Whitespace</td></tr>
+        <tr><td><code>\D</code></td><td>Not digit</td></tr>
+        <tr><td><code>\W</code></td><td>Not word</td></tr>
+        <tr><td><code>\S</code></td><td>Not whitespace</td></tr>
+        <tr><td><code>[abc]</code></td><td>Character set</td></tr>
+        <tr><td><code>[^abc]</code></td><td>Negated set</td></tr>
+      </table>
+    </div>
+    <div class="cheatsheet-col">
+      <h3>Quantifiers</h3>
+      <table class="cheatsheet-table">
+        <tr><td><code>*</code></td><td>0 or more</td></tr>
+        <tr><td><code>+</code></td><td>1 or more</td></tr>
+        <tr><td><code>?</code></td><td>0 or 1</td></tr>
+        <tr><td><code>{n}</code></td><td>Exactly n</td></tr>
+        <tr><td><code>{n,}</code></td><td>n or more</td></tr>
+        <tr><td><code>{n,m}</code></td><td>Between n and m</td></tr>
+      </table>
+      <h3>Groups & Lookaround</h3>
+      <table class="cheatsheet-table">
+        <tr><td><code>(abc)</code></td><td>Capture group</td></tr>
+        <tr><td><code>(?:abc)</code></td><td>Non-capturing group</td></tr>
+        <tr><td><code>(?=abc)</code></td><td>Positive lookahead</td></tr>
+        <tr><td><code>(?!abc)</code></td><td>Negative lookahead</td></tr>
+      </table>
+    </div>
+    <div class="cheatsheet-col">
+      <h3>Anchors</h3>
+      <table class="cheatsheet-table">
+        <tr><td><code>^</code></td><td>Start of string</td></tr>
+        <tr><td><code>$</code></td><td>End of string</td></tr>
+        <tr><td><code>\b</code></td><td>Word boundary</td></tr>
+      </table>
+      <h3>Flags</h3>
+      <table class="cheatsheet-table">
+        <tr><td><code>g</code></td><td>Global (find all)</td></tr>
+        <tr><td><code>i</code></td><td>Case insensitive</td></tr>
+        <tr><td><code>m</code></td><td>Multiline</td></tr>
+        <tr><td><code>s</code></td><td>Dot matches newline</td></tr>
+        <tr><td><code>u</code></td><td>Unicode</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="tool-seo">
+  <h2>How to Use This Regex Tester</h2>
+  <p>Enter your regular expression pattern in the top field, add flags (like <code>gi</code> for global + case-insensitive), and type or paste your test string below. Matches are highlighted in real time, and capture groups are shown on the right.</p>
+
+  <h2>Common Regex Patterns</h2>
+  <ul>
+    <li><strong>Email</strong>: <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code></li>
+    <li><strong>URL</strong>: <code>/https?:\/\/[^\s]+/g</code></li>
+    <li><strong>IP Address</strong>: <code>/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/g</code></li>
+    <li><strong>Date (YYYY-MM-DD)</strong>: <code>/\d{4}-\d{2}-\d{2}/g</code></li>
+    <li><strong>Phone (US)</strong>: <code>/\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g</code></li>
+  </ul>
+</div>
+
+<div class="cta-box">
+  <h2>Like This Tool?</h2>
+  <p>Check out our developer productivity tools: AI coding prompts, dev environment kits, and more.</p>
+  <a href="https://ifdian.net/a/devpilot" class="cta-button">Browse Products</a>
+</div>
+
+<script>
+const patternEl = document.getElementById('regex-pattern');
+const flagsEl = document.getElementById('regex-flags');
+const inputEl = document.getElementById('regex-input');
+const highlightEl = document.getElementById('regex-highlight');
+const groupsEl = document.getElementById('regex-groups');
+const matchCountEl = document.getElementById('match-count');
+const statusBar = document.getElementById('status-bar');
+
+function setStatus(msg, type) {
+  statusBar.textContent = msg;
+  statusBar.className = 'status-bar ' + (type || '');
+  if (type === 'error') { statusBar.style.background = '#3b1520'; statusBar.style.color = '#ff7b72'; }
+  else if (type === 'success') { statusBar.style.background = '#0f2b1a'; statusBar.style.color = '#56d364'; }
+  else { statusBar.style.background = ''; statusBar.style.color = ''; }
+}
+
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function testRegex() {
+  const pattern = patternEl.value;
+  const flags = flagsEl.value;
+  const text = inputEl.value;
+
+  if (!pattern) {
+    highlightEl.innerHTML = '<pre>' + escapeHtml(text) + '</pre>';
+    groupsEl.innerHTML = '<div class="no-match">Enter a pattern</div>';
+    matchCountEl.textContent = '';
+    setStatus('');
+    return;
+  }
+
+  let regex;
+  try {
+    regex = new RegExp(pattern, flags);
+    setStatus('');
+  } catch (e) {
+    highlightEl.innerHTML = '<pre>' + escapeHtml(text) + '</pre>';
+    groupsEl.innerHTML = '<div class="regex-error">' + escapeHtml(e.message) + '</div>';
+    matchCountEl.textContent = '';
+    setStatus('Invalid regex: ' + e.message, 'error');
+    return;
+  }
+
+  if (!text) {
+    highlightEl.innerHTML = '';
+    groupsEl.innerHTML = '<div class="no-match">Enter test string</div>';
+    matchCountEl.textContent = '';
+    return;
+  }
+
+  let matches = [];
+  let groups = [];
+
+  if (flags.includes('g')) {
+    let m;
+    while ((m = regex.exec(text)) !== null) {
+      matches.push({ index: m.index, length: m[0].length, groups: m.slice(1) });
+      if (m[0].length === 0) regex.lastIndex++;
+      if (matches.length > 500) break;
+    }
+  } else {
+    const m = regex.exec(text);
+    if (m) matches.push({ index: m.index, length: m[0].length, groups: m.slice(1) });
+  }
+
+  matchCountEl.textContent = matches.length + ' match' + (matches.length !== 1 ? 'es' : '');
+
+  // Build highlighted output
+  let html = '';
+  let lastIdx = 0;
+  for (const match of matches) {
+    html += escapeHtml(text.substring(lastIdx, match.index));
+    html += '<mark class="regex-match">' + escapeHtml(text.substring(match.index, match.index + match.length)) + '</mark>';
+    lastIdx = match.index + match.length;
+  }
+  html += escapeHtml(text.substring(lastIdx));
+  highlightEl.innerHTML = '<pre>' + html + '</pre>';
+
+  // Build groups
+  if (matches.length === 0) {
+    groupsEl.innerHTML = '<div class="no-match">No match</div>';
+    setStatus('No matches', '');
+  } else {
+    let ghtml = '';
+    matches.forEach((m, i) => {
+      if (m.groups.length > 0) {
+        ghtml += '<div class="group-match"><span class="group-label">Match ' + (i+1) + '</span>';
+        m.groups.forEach((g, gi) => {
+          ghtml += '<div class="group-entry"><span class="group-num">$' + (gi+1) + '</span> <code>' + (g !== undefined ? escapeHtml(g) : '<em>undefined</em>') + '</code></div>';
+        });
+        ghtml += '</div>';
+      }
+    });
+    if (!ghtml) ghtml = '<div class="no-match">No capture groups</div>';
+    groupsEl.innerHTML = ghtml;
+    setStatus(matches.length + ' match' + (matches.length !== 1 ? 'es' : ''), 'success');
+  }
+}
+
+function clearAll() { patternEl.value = ''; flagsEl.value = 'g'; inputEl.value = ''; highlightEl.innerHTML = ''; groupsEl.innerHTML = ''; matchCountEl.textContent = ''; setStatus(''); }
+async function pasteFromClipboard() { try { inputEl.value = await navigator.clipboard.readText(); testRegex(); } catch { setStatus('Clipboard denied', 'error'); } }
+
+patternEl.addEventListener('input', testRegex);
+flagsEl.addEventListener('input', testRegex);
+inputEl.addEventListener('input', testRegex);
+</script>

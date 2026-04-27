@@ -35,4 +35,10 @@ date: 2026-04-27
     </a>
     <p>Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from any text. Live updates as you type.</p>
   </li>
+  <li>
+    <a href="/tools/regex-tester/">
+      <strong>Regex Tester & Debugger</strong>
+    </a>
+    <p>Test regular expressions with real-time matching, capture group visualization, and cheat sheet.</p>
+  </li>
 </ul>
