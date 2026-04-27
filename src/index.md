@@ -10,6 +10,12 @@ layout: base.njk
 </div>
 
 <div class="cta-box">
+  <h2>Free Online Tools</h2>
+  <p>JSON formatter, Base64 encoder, URL encoder, hash generator — all private, all free, no signup.</p>
+  <a href="/tools/" class="cta-button">Open Tools</a>
+</div>
+
+<div class="cta-box">
   <h2>Digital Products</h2>
   <p>Ready-made developer tools: AI coding prompts, dev environment kits, SaaS landing page templates.</p>
   <a href="https://ifdian.net/a/devpilot" class="cta-button">Browse Products</a>

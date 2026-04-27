@@ -1,0 +1,121 @@
+---
+title: "URL Encode & Decode"
+description: "Free online URL encoder and decoder. Encode special characters for URLs or decode percent-encoded strings instantly. No signup required."
+layout: tool.njk
+tool: true
+date: 2026-04-27
+---
+
+<div class="tool-container">
+  <div class="tool-header">
+    <h1>URL Encode & Decode</h1>
+    <p>Encode text for safe use in URLs, or decode percent-encoded strings back to readable text. All processing happens in your browser.</p>
+  </div>
+
+  <div class="tool-main">
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Input</span>
+        <div class="panel-actions">
+          <button onclick="pasteFromClipboard()" class="btn btn-sm">Paste</button>
+          <button onclick="clearAll()" class="btn btn-sm">Clear</button>
+        </div>
+      </div>
+      <textarea id="url-input" placeholder="Enter text to encode, or %XX string to decode..." spellcheck="false"></textarea>
+    </div>
+
+    <div class="tool-actions">
+      <button onclick="encodeURL()" class="btn btn-primary">Encode →</button>
+      <button onclick="encodeURLComponent()" class="btn btn-secondary">Encode Component →</button>
+      <button onclick="decodeURL()" class="btn btn-secondary">← Decode</button>
+    </div>
+
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Output</span>
+        <div class="panel-actions">
+          <button onclick="swapValues()" class="btn btn-sm">Swap</button>
+          <button onclick="copyOutput()" class="btn btn-sm">Copy</button>
+        </div>
+      </div>
+      <textarea id="url-output" readonly placeholder="Result will appear here..."></textarea>
+    </div>
+  </div>
+
+  <div id="status-bar" class="status-bar"></div>
+</div>
+
+<div class="tool-features">
+  <h2>Features</h2>
+  <ul>
+    <li><strong>Two encoding modes</strong> — <code>encodeURI</code> preserves URL structure (/?:@&=+#), <code>encodeURIComponent</code> encodes everything</li>
+    <li><strong>UTF-8 Support</strong> — Handles Chinese, emoji, and other Unicode characters</li>
+    <li><strong>Privacy</strong> — All processing is client-side</li>
+  </ul>
+</div>
+
+<div class="tool-seo">
+  <h2>encodeURI vs encodeURIComponent</h2>
+  <p>Use <strong>encodeURI</strong> when you have a complete URL that needs encoding. It preserves URL-reserved characters like <code>/</code>, <code>?</code>, <code>&</code>, <code>=</code> so the URL structure stays intact.</p>
+  <p>Use <strong>encodeURIComponent</strong> when encoding a single query parameter value. It encodes ALL special characters including <code>/</code> and <code>&</code>, preventing injection into the URL structure.</p>
+
+  <h2>When to URL Encode</h2>
+  <ul>
+    <li>Passing special characters in query string parameters</li>
+    <li>Constructing URLs with user-provided input</li>
+    <li>Encoding data for <code>application/x-www-form-urlencoded</code> requests</li>
+    <li>Handling Chinese or other non-ASCII characters in URLs</li>
+  </ul>
+</div>
+
+<div class="cta-box">
+  <h2>Like This Tool?</h2>
+  <p>Check out our developer productivity tools: AI coding prompts, dev environment kits, and more.</p>
+  <a href="https://ifdian.net/a/devpilot" class="cta-button">Browse Products</a>
+</div>
+
+<script>
+const inputEl = document.getElementById('url-input');
+const outputEl = document.getElementById('url-output');
+const statusBar = document.getElementById('status-bar');
+
+function setStatus(msg, type) {
+  statusBar.textContent = msg;
+  statusBar.className = 'status-bar ' + (type || '');
+  if (type === 'error') { statusBar.style.background = '#3b1520'; statusBar.style.color = '#ff7b72'; }
+  else if (type === 'success') { statusBar.style.background = '#0f2b1a'; statusBar.style.color = '#56d364'; }
+  else { statusBar.style.background = ''; statusBar.style.color = ''; }
+}
+
+function encodeURL() {
+  const val = inputEl.value;
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    outputEl.value = encodeURI(val);
+    setStatus('Encoded (URI)', 'success');
+  } catch (e) { setStatus('Encoding failed: ' + e.message, 'error'); }
+}
+
+function encodeURLComponent() {
+  const val = inputEl.value;
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    outputEl.value = encodeURIComponent(val);
+    setStatus('Encoded (Component)', 'success');
+  } catch (e) { setStatus('Encoding failed: ' + e.message, 'error'); }
+}
+
+function decodeURL() {
+  const val = inputEl.value.trim();
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    outputEl.value = decodeURIComponent(val);
+    setStatus('Decoded', 'success');
+  } catch (e) { setStatus('Decoding failed: invalid percent encoding', 'error'); }
+}
+
+function clearAll() { inputEl.value = ''; outputEl.value = ''; setStatus(''); }
+function swapValues() { const t = inputEl.value; inputEl.value = outputEl.value; outputEl.value = t; setStatus('Swapped'); }
+async function pasteFromClipboard() { try { inputEl.value = await navigator.clipboard.readText(); setStatus('Pasted'); } catch { setStatus('Clipboard denied', 'error'); } }
+function copyOutput() { if (!outputEl.value) { setStatus('Nothing to copy', 'error'); return; } navigator.clipboard.writeText(outputEl.value).then(() => setStatus('Copied', 'success')).catch(() => setStatus('Copy failed', 'error')); }
+</script>

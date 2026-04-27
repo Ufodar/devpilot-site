@@ -1,0 +1,200 @@
+---
+title: "JSON Formatter & Validator"
+description: "Free online JSON formatter, validator, and beautifier. Paste messy JSON and get clean, indented output instantly. No signup required."
+layout: tool.njk
+tool: true
+date: 2026-04-27
+---
+
+<div class="tool-container">
+  <div class="tool-header">
+    <h1>JSON Formatter & Validator</h1>
+    <p>Paste your JSON below to format, validate, and beautify it instantly. All processing happens in your browser — nothing is sent to any server.</p>
+  </div>
+
+  <div class="tool-main">
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Input JSON</span>
+        <div class="panel-actions">
+          <button onclick="pasteFromClipboard()" class="btn btn-sm">Paste</button>
+          <button onclick="clearInput()" class="btn btn-sm">Clear</button>
+        </div>
+      </div>
+      <textarea id="json-input" placeholder='{"key": "value", "array": [1, 2, 3]}' spellcheck="false"></textarea>
+    </div>
+
+    <div class="tool-actions">
+      <button onclick="formatJSON()" class="btn btn-primary">Format</button>
+      <button onclick="minifyJSON()" class="btn btn-secondary">Minify</button>
+      <button onclick="validateJSON()" class="btn btn-secondary">Validate</button>
+    </div>
+
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Output</span>
+        <div class="panel-actions">
+          <button onclick="copyOutput()" class="btn btn-sm">Copy</button>
+        </div>
+      </div>
+      <div id="json-output" class="output-area"></div>
+    </div>
+  </div>
+
+  <div id="status-bar" class="status-bar"></div>
+</div>
+
+<div class="tool-features">
+  <h2>Features</h2>
+  <ul>
+    <li><strong>Format / Beautify</strong> — Indent messy JSON with 2-space indentation for readability</li>
+    <li><strong>Minify</strong> — Compress JSON to a single line, removing all whitespace</li>
+    <li><strong>Validate</strong> — Check if your JSON is valid and get specific error messages</li>
+    <li><strong>Privacy</strong> — All processing is client-side. Your data never leaves your browser</li>
+    <li><strong>Syntax Highlighting</strong> — Color-coded output for easy reading</li>
+  </ul>
+</div>
+
+<div class="tool-seo">
+  <h2>How to Use This JSON Formatter</h2>
+  <p>Paste or type your JSON into the input box above and click <strong>Format</strong> to beautify it with proper indentation. Click <strong>Minify</strong> to compress it into a single line. Click <strong>Validate</strong> to check for syntax errors — the tool will show you the exact line and column where the error occurs.</p>
+
+  <h2>Common JSON Formatting Issues</h2>
+  <p>JSON (JavaScript Object Notation) is the standard data format for APIs and configuration files. Common issues include:</p>
+  <ul>
+    <li><strong>Trailing commas</strong> — JSON does not allow trailing commas after the last item in an object or array</li>
+    <li><strong>Single quotes</strong> — JSON requires double quotes for strings and keys</li>
+    <li><strong>Unquoted keys</strong> — All keys must be wrapped in double quotes</li>
+    <li><strong>Comments</strong> — Standard JSON does not support comments (// or /* */)</li>
+  </ul>
+
+  <h2>JSON vs JSON5</h2>
+  <p>This tool validates standard JSON (RFC 8259). If you need features like trailing commas, unquoted keys, or comments, consider using JSON5 instead. However, most APIs and config parsers expect standard JSON.</p>
+</div>
+
+<div class="cta-box">
+  <h2>Like This Tool?</h2>
+  <p>Check out our developer productivity tools: AI coding prompts, dev environment kits, and more.</p>
+  <a href="https://ifdian.net/a/devpilot" class="cta-button">Browse Products</a>
+</div>
+
+<script>
+const input = document.getElementById('json-input');
+const output = document.getElementById('json-output');
+const statusBar = document.getElementById('status-bar');
+
+function setStatus(msg, type) {
+  statusBar.textContent = msg;
+  statusBar.className = 'status-bar ' + (type || '');
+  if (type === 'error') {
+    statusBar.style.background = '#3b1520';
+    statusBar.style.color = '#ff7b72';
+  } else if (type === 'success') {
+    statusBar.style.background = '#0f2b1a';
+    statusBar.style.color = '#56d364';
+  } else {
+    statusBar.style.background = '';
+    statusBar.style.color = '';
+  }
+}
+
+function syntaxHighlight(json) {
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return json.replace(/("(\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+    let cls = 'json-number';
+    if (/^"/.test(match)) {
+      if (/:$/.test(match)) {
+        cls = 'json-key';
+      } else {
+        cls = 'json-string';
+      }
+    } else if (/true|false/.test(match)) {
+      cls = 'json-boolean';
+    } else if (/null/.test(match)) {
+      cls = 'json-null';
+    }
+    return '<span class="' + cls + '">' + match + '</span>';
+  });
+}
+
+function formatJSON() {
+  const val = input.value.trim();
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    const parsed = JSON.parse(val);
+    const formatted = JSON.stringify(parsed, null, 2);
+    output.innerHTML = '<pre>' + syntaxHighlight(formatted) + '</pre>';
+    setStatus('Formatted successfully — ' + formatted.split('\n').length + ' lines', 'success');
+  } catch (e) {
+    output.innerHTML = '<pre class="error-output">' + escapeHtml(e.message) + '</pre>';
+    setStatus('Invalid JSON: ' + e.message, 'error');
+  }
+}
+
+function minifyJSON() {
+  const val = input.value.trim();
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    const parsed = JSON.parse(val);
+    const minified = JSON.stringify(parsed);
+    output.innerHTML = '<pre>' + escapeHtml(minified) + '</pre>';
+    setStatus('Minified — ' + minified.length + ' bytes', 'success');
+  } catch (e) {
+    output.innerHTML = '<pre class="error-output">' + escapeHtml(e.message) + '</pre>';
+    setStatus('Invalid JSON: ' + e.message, 'error');
+  }
+}
+
+function validateJSON() {
+  const val = input.value.trim();
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    JSON.parse(val);
+    output.innerHTML = '<pre class="valid-output">✓ Valid JSON</pre>';
+    setStatus('Valid JSON', 'success');
+  } catch (e) {
+    output.innerHTML = '<pre class="error-output">✗ ' + escapeHtml(e.message) + '</pre>';
+    setStatus('Invalid JSON: ' + e.message, 'error');
+  }
+}
+
+function clearInput() {
+  input.value = '';
+  output.innerHTML = '';
+  setStatus('');
+}
+
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    input.value = text;
+    setStatus('Pasted from clipboard');
+  } catch {
+    setStatus('Clipboard access denied', 'error');
+  }
+}
+
+function copyOutput() {
+  const pre = output.querySelector('pre');
+  if (!pre) { setStatus('Nothing to copy', 'error'); return; }
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    setStatus('Copied to clipboard', 'success');
+  }).catch(() => {
+    setStatus('Copy failed', 'error');
+  });
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+input.addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const start = this.selectionStart;
+    const end = this.selectionEnd;
+    this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+    this.selectionStart = this.selectionEnd = start + 2;
+  }
+});
+</script>

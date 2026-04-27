@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | DevToolkit</title>
+  <meta name="description" content="{{ description }}">
+  <link rel="canonical" href="https://ufodar.github.io/devpilot-site{{ page.url }}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="https://ufodar.github.io/devpilot-site{{ page.url }}">
+  <meta property="og:site_name" content="DevToolkit">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ description }}">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "{{ title }}",
+    "description": "{{ description }}",
+    "url": "https://ufodar.github.io/devpilot-site{{ page.url }}",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CNY"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/tools.css">
+</head>
+<body>
+  {% include "nav.njk" %}
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer>
+    <p>&copy; 2026 DevToolkit. Free developer tools — no signup, no tracking.</p>
+  </footer>
+</body>
+</html>

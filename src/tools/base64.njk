@@ -1,0 +1,154 @@
+---
+title: "Base64 Encode & Decode"
+description: "Free online Base64 encoder and decoder. Convert text to Base64 or decode Base64 strings instantly. Supports UTF-8. No signup required."
+layout: tool.njk
+tool: true
+date: 2026-04-27
+---
+
+<div class="tool-container">
+  <div class="tool-header">
+    <h1>Base64 Encode & Decode</h1>
+    <p>Encode text to Base64 or decode Base64 strings. All processing happens in your browser — nothing is sent to any server.</p>
+  </div>
+
+  <div class="tool-main">
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Input</span>
+        <div class="panel-actions">
+          <button onclick="pasteFromClipboard()" class="btn btn-sm">Paste</button>
+          <button onclick="clearAll()" class="btn btn-sm">Clear</button>
+        </div>
+      </div>
+      <textarea id="b64-input" placeholder="Enter text to encode, or Base64 string to decode..." spellcheck="false"></textarea>
+    </div>
+
+    <div class="tool-actions">
+      <button onclick="encodeB64()" class="btn btn-primary">Encode →</button>
+      <button onclick="decodeB64()" class="btn btn-secondary">← Decode</button>
+    </div>
+
+    <div class="tool-panel">
+      <div class="panel-header">
+        <span>Output</span>
+        <div class="panel-actions">
+          <button onclick="swapValues()" class="btn btn-sm">Swap</button>
+          <button onclick="copyOutput()" class="btn btn-sm">Copy</button>
+        </div>
+      </div>
+      <textarea id="b64-output" readonly placeholder="Result will appear here..."></textarea>
+    </div>
+  </div>
+
+  <div id="status-bar" class="status-bar"></div>
+</div>
+
+<div class="tool-features">
+  <h2>Features</h2>
+  <ul>
+    <li><strong>UTF-8 Support</strong> — Handles Chinese, emoji, and other Unicode characters correctly</li>
+    <li><strong>Swap</strong> — Swap input and output to quickly reverse the operation</li>
+    <li><strong>Privacy</strong> — All processing is client-side. Your data never leaves your browser</li>
+  </ul>
+</div>
+
+<div class="tool-seo">
+  <h2>What is Base64?</h2>
+  <p>Base64 is a binary-to-text encoding scheme that represents binary data using 64 printable ASCII characters (A-Z, a-z, 0-9, +, /). It's commonly used to encode data for transmission over media designed to deal with text, such as email (MIME) or embedding binary data in JSON, HTML, or CSS.</p>
+
+  <h2>Common Uses</h2>
+  <ul>
+    <li><strong>Data URLs</strong> — Embed small images directly in HTML or CSS using <code>data:image/png;base64,...</code></li>
+    <li><strong>API Authentication</strong> — HTTP Basic Auth uses Base64-encoded <code>username:password</code></li>
+    <li><strong>Email Attachments</strong> — MIME encodes binary attachments in Base64</li>
+    <li><strong>JWT Tokens</strong> — JSON Web Tokens use Base64URL encoding for header and payload</li>
+    <li><strong>Config Files</strong> — Kubernetes secrets and other config systems store values as Base64</li>
+  </ul>
+
+  <h2>Base64 vs Base64URL</h2>
+  <p>Standard Base64 uses <code>+</code> and <code>/</code> characters, which are not URL-safe. Base64URL replaces them with <code>-</code> and <code>_</code> respectively, and omits padding <code>=</code>. JWT tokens use Base64URL encoding.</p>
+</div>
+
+<div class="cta-box">
+  <h2>Like This Tool?</h2>
+  <p>Check out our developer productivity tools: AI coding prompts, dev environment kits, and more.</p>
+  <a href="https://ifdian.net/a/devpilot" class="cta-button">Browse Products</a>
+</div>
+
+<script>
+const inputEl = document.getElementById('b64-input');
+const outputEl = document.getElementById('b64-output');
+const statusBar = document.getElementById('status-bar');
+
+function setStatus(msg, type) {
+  statusBar.textContent = msg;
+  statusBar.className = 'status-bar ' + (type || '');
+  if (type === 'error') {
+    statusBar.style.background = '#3b1520';
+    statusBar.style.color = '#ff7b72';
+  } else if (type === 'success') {
+    statusBar.style.background = '#0f2b1a';
+    statusBar.style.color = '#56d364';
+  } else {
+    statusBar.style.background = '';
+    statusBar.style.color = '';
+  }
+}
+
+function encodeB64() {
+  const val = inputEl.value;
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    const encoded = btoa(unescape(encodeURIComponent(val)));
+    outputEl.value = encoded;
+    setStatus('Encoded — ' + encoded.length + ' chars', 'success');
+  } catch (e) {
+    setStatus('Encoding failed: ' + e.message, 'error');
+  }
+}
+
+function decodeB64() {
+  const val = inputEl.value.trim();
+  if (!val) { setStatus('No input', 'error'); return; }
+  try {
+    const decoded = decodeURIComponent(escape(atob(val)));
+    outputEl.value = decoded;
+    setStatus('Decoded — ' + decoded.length + ' chars', 'success');
+  } catch (e) {
+    setStatus('Decoding failed: not valid Base64', 'error');
+  }
+}
+
+function clearAll() {
+  inputEl.value = '';
+  outputEl.value = '';
+  setStatus('');
+}
+
+function swapValues() {
+  const tmp = inputEl.value;
+  inputEl.value = outputEl.value;
+  outputEl.value = tmp;
+  setStatus('Swapped');
+}
+
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    inputEl.value = text;
+    setStatus('Pasted from clipboard');
+  } catch {
+    setStatus('Clipboard access denied', 'error');
+  }
+}
+
+function copyOutput() {
+  if (!outputEl.value) { setStatus('Nothing to copy', 'error'); return; }
+  navigator.clipboard.writeText(outputEl.value).then(() => {
+    setStatus('Copied to clipboard', 'success');
+  }).catch(() => {
+    setStatus('Copy failed', 'error');
+  });
+}
+</script>
